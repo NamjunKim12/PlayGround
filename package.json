@@ -1,0 +1,20 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "목적없이 자유롭게 코드를 작성하는 놀이터같은 공간",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NamjunKim12/PlayGround.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NamjunKim12/PlayGround/issues"
+  },
+  "homepage": "https://github.com/NamjunKim12/PlayGround#readme"
+}
