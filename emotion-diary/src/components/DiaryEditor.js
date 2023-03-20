@@ -1,4 +1,10 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useContext,
+  useCallback,
+  useEffect,
+} from "react";
 import MyHeader from "../components/MyHeader";
 import MyButton from "../components/MyButton";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +22,7 @@ export default function DiaryEditor({ isEdit, originData }) {
   const [content, setContent] = useState("");
   const [date, setDate] = useState(getStringDate(new Date()));
   const [emotion, setEmotion] = useState(3);
-  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
 
   useEffect(() => {
     if (isEdit) {
@@ -26,9 +32,9 @@ export default function DiaryEditor({ isEdit, originData }) {
     }
   }, [isEdit, originData]);
 
-  const handleClickEmote = (emotion) => {
+  const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
-  };
+  }, []);
 
   const handleSubmit = () => {
     if (content.length < 1) {
@@ -51,12 +57,28 @@ export default function DiaryEditor({ isEdit, originData }) {
     }
   };
 
+  const handleRemove = () => {
+    if (window.confirm("일기를 삭제하시겠습니까?")) {
+      onRemove(originData.id);
+      navigate("/", { replace: true });
+    }
+  };
+
   return (
     <div className="DiaryEditor">
       <MyHeader
         head_text={isEdit ? "일기 수정하기" : "새 일기쓰기"}
         leftchild={
           <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
+        }
+        rightchild={
+          isEdit && (
+            <MyButton
+              text={"제거하기"}
+              onClick={handleRemove}
+              type={"negative"}
+            />
+          )
         }
       />
       <div>

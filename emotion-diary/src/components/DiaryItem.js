@@ -2,7 +2,7 @@ import React from "react";
 import MyButton from "./MyButton";
 import { useNavigate } from "react-router-dom";
 
-export default function DiaryItem({ id, emotion, content, date }) {
+function DiaryItem({ id, emotion, content, date }) {
   const navigate = useNavigate();
   const env = process.env;
   env.PUBLIC_URL = env.PUBLIC_URL || "";
@@ -40,3 +40,4 @@ export default function DiaryItem({ id, emotion, content, date }) {
     </div>
   );
 }
+export default React.memo(DiaryItem);

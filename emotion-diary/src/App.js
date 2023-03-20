@@ -1,43 +1,10 @@
-import React, { useReducer, useRef } from "react";
+import React, { useReducer, useRef, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
-
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "첫번째 일기",
-    date: new Date().getTime() + 1,
-  },
-  {
-    id: 2,
-    emotion: 3,
-    content: "ㄷ두번째 일기",
-    date: new Date().getTime() + 2,
-  },
-  {
-    id: 3,
-    emotion: 5,
-    content: "세번째 일기",
-    date: new Date().getTime() + 3,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "네번째 일기",
-    date: new Date().getTime() + 4,
-  },
-  {
-    id: 5,
-    emotion: 2,
-    content: "다섯번째 일기",
-    date: new Date().getTime() + 5,
-  },
-];
 
 const reducer = (state, action) => {
   let newState = [];
@@ -62,6 +29,7 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+  localStorage.setItem("diary", JSON.stringify(newState));
   return newState;
 };
 
@@ -69,15 +37,29 @@ export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
 function App() {
-  const [data, dispatch] = useReducer(reducer, dummyData);
+  const [data, dispatch] = useReducer(reducer, []);
   const dataId = useRef(0);
+
+  useEffect(() => {
+    const localData = localStorage.getItem("diary");
+    if (localData) {
+      const diaryList = JSON.parse(localData).sort(
+        (a, b) => parseInt(b.id) - parseInt(a.id)
+      );
+
+      if (diaryList.length >= 1) {
+        dataId.current = parseInt(diaryList[0]?.id) + 1;
+        dispatch({ type: "INIT", data: diaryList });
+      }
+    }
+  }, []);
 
   const onCreate = (date, content, emotion) => {
     dispatch({
       type: "CREATE",
       data: {
         id: dataId.current,
-        date: new date(date).getTime(),
+        date: new Date(date).getTime(),
         content,
         emotion,
       },
